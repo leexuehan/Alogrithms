@@ -7,8 +7,6 @@ import java.util.Stack;
  * @author leexuehan on 2019/6/10.
  */
 public class Solution {
-    private Stack<String> tags = new Stack<>();
-
 
     public boolean isValid(String code) {
         if (code == null) {
@@ -22,10 +20,11 @@ public class Solution {
             return false;
         }
 
+        Stack<String> tags = new Stack<>();
         int codeLen = code.length();
         int curIndex = 0;
         while (curIndex < codeLen) {
-            int nextIndex = extractAndUpdateTags(code, curIndex);
+            int nextIndex = extractAndUpdateTags(tags, code, curIndex);
             if (nextIndex == -1) {
                 return false;
             } else {
@@ -35,7 +34,7 @@ public class Solution {
         return tags.isEmpty();
     }
 
-    private int extractAndUpdateTags(String code, int fromIndex) {
+    private int extractAndUpdateTags(Stack<String> tags, String code, int fromIndex) {
         StringBuilder tag = new StringBuilder();
         int codeLen = code.length();
         while (fromIndex < codeLen) {
@@ -51,14 +50,14 @@ public class Solution {
         }
         String trimTags = tag.toString().trim();
         System.out.println(trimTags);
-        if (updateTags(trimTags) != -1) {
+        if (updateTags(tags, trimTags) != -1) {
             return fromIndex + 1;
         } else {
             return -1;
         }
     }
 
-    private int updateTags(String tag) {
+    private int updateTags(Stack<String> tags, String tag) {
         String tagCmp = null;
         if (tag.startsWith("/")) {
             String substring = tag.substring(1);
