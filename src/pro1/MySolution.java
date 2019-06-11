@@ -10,7 +10,8 @@ public class MySolution {
     public static void main(String[] args) {
         MySolution mySolution = new MySolution();
         String testCase = "<A>tagContentA<B><C>tagContentB</B></C></A>";
-        boolean valid = mySolution.isValid(testCase);
+        String testCase2 = "<DIV>This is the first line <![CDATA[<div>]]></DIV>";
+        boolean valid = mySolution.isValid(testCase2);
         System.out.println("valid result:[" + valid + "]");
     }
 
@@ -32,6 +33,7 @@ public class MySolution {
         int codeLen = code.length();
         int index = 0;
         boolean tagOpen = false;
+        boolean cdataTagOpen = false;
         while (index < codeLen) {
             char c = code.charAt(index);
             //处理括号
@@ -49,27 +51,37 @@ public class MySolution {
                         braceStack.pop();
                         //校验TAG_NAME
                         String tag = tagName.toString();
-                        if (!isUpperCase(tag)) {
-                            System.out.println("tagName is not uppercase:[" + tag + "]");
-                            return false;
-                        }
-                        if (lengthUnsatisfied(tag)) {
-                            System.out.println("tagName length unsatisfied:[" + tag + "]");
-                            return false;
-                        }
                         //标签置空
                         tagName = new StringBuilder();
                         //闭合标签
                         if (tag.startsWith("/")) {
-                            if (tagStack.isEmpty() || !tag.endsWith(tagStack.peek())) {
-                                System.out.println("tagName not has its match:[" + tag + "],top of stack is:[" + tagStack.peek() + "]");
+                            //截取/后的字符串进行比较
+                            String tagCmp = tag.substring(1);
+                            if (tagStack.isEmpty() || !tagCmp.endsWith(tagStack.peek())) {
+                                System.out.println("tagName not has its match:[" + tagCmp + "],top of stack is:[" + tagStack.peek() + "]");
                                 return false;
                             } else {
                                 tagStack.pop();
                             }
                         }
+                        //CDATA 标签，不让校验器校验
+                        if (tag.startsWith("![CDATA[")) {
+                            if (!tag.endsWith("]]")) {
+                                System.out.println("cdata tag not satisfied:" + tag);
+                                return false;
+                            }
+                        }
                         //开始标签
                         else {
+                            //校验标签
+                            if (!isUpperCase(tag)) {
+                                System.out.println("tagName is not uppercase:[" + tag + "]");
+                                return false;
+                            }
+                            if (lengthUnsatisfied(tag)) {
+                                System.out.println("tagName length unsatisfied:" + tag);
+                                return false;
+                            }
                             System.out.println("push new tag:" + tag);
                             tagStack.push(tag);
                         }
@@ -97,11 +109,7 @@ public class MySolution {
     }
 
     private boolean isUpperCase(String tag) {
-        String tagChar = tag;
-        if (tag.startsWith("/")) {
-            tagChar = tag.substring(1);
-        }
-        for (Character c : tagChar.toCharArray()) {
+        for (Character c : tag.toCharArray()) {
             if (c < 'A' || c > 'Z') {
                 return false;
             }
