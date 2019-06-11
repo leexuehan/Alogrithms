@@ -20,11 +20,13 @@ import java.util.Stack;
  * <p>
  * 注意：
  * 1）为了防止出现这样的情况:
- * ******* aaaa<B>DFDF</B>
- * ******* <M>fdfdf</M>not end
+ * aaaa<B>DFDF</B>
+ * <M>fdfdf</M>not end
+ * <!CDATA[DATA_CONTENT[]]><M><M/>
  * 办法：index 前移时，必须保证 Stack 不为空（Stack 只能在遍历完所有的元素时为空）
- * 2）为了防止cdata没有被封装到 tag 内
- * 办法：
+ * 2）为了防止出现这样的情况:
+ * <A><A/><B></B>
+ * 办法：遇到闭合标签处理完毕时，需要判断 Stack 是否为空
  */
 public class Solution {
     public boolean isValid(String code) {
@@ -71,15 +73,13 @@ public class Solution {
                         if (!isTagNameValid(tagName)) {
                             return false;
                         }
-                        if (tagStack.isEmpty()) {
-                            return false;
-                        }
                         if (tagStack.peek().equals(tagName)) {
                             tagStack.pop();
                         } else {
                             return false;
                         }
                         index = closureTagEndIndex + 1;
+                        //防止提前栈空
                         if (index != localCode.length() && tagStack.isEmpty()) {
                             return false;
                         }
