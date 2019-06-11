@@ -204,5 +204,33 @@ public class Solution {
         System.out.println("isvalid:[" + valid3 + "]");
     }
 
+    //思路:
+    // 从左到右遍历字符串
+    // c 存储遍历到的字符
+    // next 存储下一个遍历的字符
+    //-----c == '<'
+    //---------next == '/'
+    //-------------close tagName 开始
+    //---------next == '!'
+    //-------------CDATA tagName 开始:移动index 到符号“]]>”后
+    //---------next == other
+    //-------------open tagName 开始
+    //---------入符号栈
+    //-----c == '>'
+    //---------open tagName 开始？
+    //------------open tagName 结束;检验 tagName是否规范;tagName 入栈;
+    //------------出符号栈
+    //---------close tagName 开始？
+    //------------close tagName 结束;tagName 出栈匹配
+    //------------出符号栈
+    //-----c == other?
+    //----------符号栈为空？
+    //-----------------返回失败
+    //-------------close tagName 开始?
+    //--------------------close tagName.append
+    //-------------open tagName 开始?
+    //--------------------open tagName.append
+    //-------------other?
+    //---------------------ignore
 
 }

@@ -7,10 +7,13 @@ import java.util.Stack;
  */
 public class Braces {
     public static void main(String[] args) {
-        String testCase = "<<><><<>>>";
-        Braces braces = new Braces();
-        boolean result = braces.isPairs(testCase);
-        System.out.println(result);
+//        String testCase = "<<><><<>>>";
+//        Braces braces = new Braces();
+//        boolean result = braces.isPairs(testCase);
+//        System.out.println(result);
+
+        String str = "cdef";
+        System.out.println("abcdef".lastIndexOf(str,2));
 
     }
 
