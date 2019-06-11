@@ -1,4 +1,4 @@
-package pro1;
+package main.java.pro1;
 
 import java.util.Stack;
 
