@@ -84,8 +84,8 @@ public class Solution {
         int length = number.length();
         if (length % 2 == 0) {
             char left = number.charAt(length / 2 - 1);
-            char right = number.charAt(length / 2);
-            return left == '0' || left == '9' || right == '0' || right == '9';
+//            char right = number.charAt(length / 2);
+            return left == '0' || left == '9';
         } else {
             char mid = number.charAt(length / 2);
             return mid == '0' || mid == '9';

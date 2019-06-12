@@ -78,4 +78,12 @@ public class SolutionTest {
         String result = solution.nearestPalindromic(number);
         assertEquals("9", result);
     }
+
+    @Test
+    public void testCase10() throws Exception {
+        String number = "1095500901";
+        Solution solution = new Solution();
+        String result = solution.nearestPalindromic(number);
+        assertEquals("1095555901", result);
+    }
 }
