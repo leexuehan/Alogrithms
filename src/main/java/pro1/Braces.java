@@ -1,4 +1,4 @@
-package main.java.pro1;
+package pro1;
 
 import java.util.Stack;
 
@@ -13,7 +13,7 @@ public class Braces {
 //        System.out.println(result);
 
         String str = "cdef";
-        System.out.println("abcdef".lastIndexOf(str,2));
+        System.out.println("abcdef".lastIndexOf(str, 2));
 
     }
 
