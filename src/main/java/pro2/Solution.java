@@ -48,8 +48,15 @@ package pro2;
  * i.e:
  * 10987 -> 110xx -> 11011
  * <p>
+ * 3) 两位数
+ * i.e:
+ * 10 -> 9
  * <p>
- * *************
+ * 4) 一位数
+ * i.e:
+ * 1 -> 0
+ * <p>
+ * <p>
  */
 public class Solution {
     public String nearestPalindromic(String number) {
@@ -57,6 +64,22 @@ public class Solution {
             return "";
         }
         String genMirror = ordinaryMirror(number);
+        //两位数需要特殊考虑
+        if (number.length() == 2) {
+            //以0结尾
+            if (number.charAt(1) == '0') {
+                number = String.valueOf(Long.parseLong(number) - 1);
+            }
+            //以9结尾
+            else if (number.charAt(1) == '9') {
+                number = String.valueOf(Long.parseLong(number) + 1);
+            } else {
+                
+            }
+            if (number.equals(new StringBuilder(number).reverse().toString())) {
+                return number;
+            }
+        }
         //特殊情况
         if (hasSpecial(number)) {
             String specialMirror = specialMirror(number);

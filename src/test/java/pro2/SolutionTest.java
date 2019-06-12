@@ -86,4 +86,12 @@ public class SolutionTest {
         String result = solution.nearestPalindromic(number);
         assertEquals("1095555901", result);
     }
+
+    @Test
+    public void testCase11() {
+        String number = "11";
+        Solution solution = new Solution();
+        String result = solution.nearestPalindromic(number);
+        assertEquals("9", result);
+    }
 }
