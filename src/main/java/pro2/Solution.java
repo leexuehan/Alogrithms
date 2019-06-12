@@ -56,9 +56,92 @@ public class Solution {
         if (number == null || number.length() <= 0 || number.length() > 18) {
             return "";
         }
+        String genMirror = ordinaryMirror(number);
+        //特殊情况
+        if (hasSpecial(number)) {
+            String specialMirror = specialMirror(number);
+            long generalValue = Long.parseLong(genMirror);
+            long specialValue = Long.parseLong(specialMirror);
 
-        return "";
+            long absGeneral = Math.abs(generalValue - Long.parseLong(number));
+            long specialGeneral = Math.abs(specialValue - Long.parseLong(number));
 
+            if (absGeneral < specialGeneral) {
+                return genMirror;
+            } else if (absGeneral > specialGeneral) {
+                return specialMirror;
+            } else {
+                return generalValue < specialValue ? genMirror : specialMirror;
+            }
+        }
+        //一般情况
+        else {
+            return genMirror;
+        }
+    }
+
+    private boolean hasSpecial(String number) {
+        int length = number.length();
+        if (length % 2 == 0) {
+            char left = number.charAt(length / 2 - 1);
+            char right = number.charAt(length / 2);
+            return left == '0' || left == '9' || right == '0' || right == '9';
+        } else {
+            char mid = number.charAt(length / 2);
+            return mid == '0' || mid == '9';
+        }
+    }
+
+    protected String specialMirror(String number) {
+        int len = number.length();
+        if (len == 1) {
+            if (number.charAt(0) == '0') {
+                return "1";
+            }
+        }
+
+        int midIndex = (len % 2 == 0 ? len / 2 - 1 : len / 2);
+        String newValue;
+        if (number.charAt(midIndex) == '0') {
+            String half = number.substring(0, midIndex + 1);
+            long halfValue = Long.parseLong(half);
+            newValue = String.valueOf(halfValue - 1);
+        } else if (number.charAt(midIndex) == '9') {
+            String half = number.substring(0, midIndex + 1);
+            long halfValue = Long.parseLong(half);
+            newValue = String.valueOf(halfValue + 1);
+        } else {
+            newValue = number;
+        }
+        return generateMirror(newValue, 0, newValue.length() - 1, true);
+    }
+
+    //普通镜像
+    private String ordinaryMirror(String number) {
+        int len = number.length();
+        if (len == 1) {
+            return String.valueOf(number.charAt(0) - '1');
+        }
+        if (len % 2 == 0) {
+            return generateMirror(number, 0, len / 2 - 1, true);
+        } else {
+            return generateMirror(number, 0, len / 2, false);
+        }
+    }
+
+
+    protected String generateMirror(String number, int fromIndex, int toIndex, boolean isInclusive) {
+        if (fromIndex > toIndex || toIndex > number.length() - 1) {
+            return null;
+        }
+        String half;
+        if (isInclusive) {
+            half = number.substring(fromIndex, toIndex + 1);
+            return half + new StringBuilder(half).reverse();
+        } else {
+            half = number.substring(fromIndex, toIndex);
+            return half + number.charAt(toIndex) + new StringBuilder(half).reverse();
+        }
     }
 
 }
