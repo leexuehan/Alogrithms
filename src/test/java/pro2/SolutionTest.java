@@ -6,7 +6,7 @@ import static org.junit.Assert.*;
 
 public class SolutionTest {
     @Test
-    public void testPalindromic() throws Exception {
+    public void testCase2() throws Exception {
         String number = "1234320";
         Solution solution = new Solution();
         String result = solution.nearestPalindromic(number);
@@ -14,7 +14,7 @@ public class SolutionTest {
     }
 
     @Test
-    public void testPalindromic2() throws Exception {
+    public void testCase1() throws Exception {
         String number = "1213";
         Solution solution = new Solution();
         String result = solution.nearestPalindromic(number);
@@ -61,15 +61,6 @@ public class SolutionTest {
         assertEquals("232", mirror);
     }
 
-    @Test
-    public void testCase8() throws Exception {
-        String number = "2324";
-        Solution solution = new Solution();
-        String mirror1 = solution.generateMirror(number, 0, 1, true);
-        assertEquals("2332", mirror1);
-        String mirror2 = solution.generateMirror(number, 0, 1, false);
-        assertEquals("232", mirror2);
-    }
 
     @Test
     public void testCase9() throws Exception {
@@ -84,7 +75,7 @@ public class SolutionTest {
         String number = "1095500901";
         Solution solution = new Solution();
         String result = solution.nearestPalindromic(number);
-        assertEquals("1095555901", result);
+        assertEquals("1095445901", result);
     }
 
     @Test
@@ -93,5 +84,31 @@ public class SolutionTest {
         Solution solution = new Solution();
         String result = solution.nearestPalindromic(number);
         assertEquals("9", result);
+    }
+
+    @Test
+    public void testCase12() throws Exception {
+        String number = "999";
+        Solution solution = new Solution();
+        String result = solution.nearestPalindromic(number);
+        assertEquals("1001", result);
+    }
+
+    @Test
+    public void testCase13() throws Exception {
+        String number = "1000";
+        Solution solution = new Solution();
+        String result = solution.nearestPalindromic(number);
+        assertEquals("999", result);
+    }
+
+    @Test
+    public void testMirror() throws Exception {
+        String num = "123";
+        Solution solution = new Solution();
+        String mirror = solution.mirror(num, true);
+        String mirror1 = solution.mirror(num, false);
+        System.out.println(mirror);
+        System.out.println(mirror1);
     }
 }

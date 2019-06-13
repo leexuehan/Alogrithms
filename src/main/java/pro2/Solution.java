@@ -51,119 +51,113 @@ package pro2;
  * 3) 两位数
  * i.e:
  * 10 -> 9
+ * 11 -> 9
+ * 12 -> 11
  * <p>
+ * up limit:
+ * 个位 < 十位？
+ * --------个位=十位
+ * else
+ * ----十位数+1
+ * --------不进位
+ * --------------镜像
+ * --------进位
+ * -------------- 返回 101
+ * down limit:
+ * 个位 > 十位？
+ * -------- 十位=个位
+ * else
+ * -----十位数-1
+ * -------- 0
+ * --------------直接返回 9
+ * --------- not 0
+ * -------------- 镜像
  * 4) 一位数
  * i.e:
  * 1 -> 0
  * <p>
+ * 值减1，直接返回
  * <p>
+ * <p>
+ * <p>
+ * 思路四：
+ * 在对每个数进行处理时，需要对该数的 first half 进行 +1，-1,+0,三种操作，
+ * <p>
+ * 获得三个回文数
+ * <p>
+ * 比较此三个回文数的与原数字的绝对值差的大小:
+ * <p>
+ * 如果其中某一个回文数与原数字相同，即原始数字就是回文数，则将其绝对值差置为最大
+ * <p>
+ * 特殊情况：
+ * 1）全9的数字:999、9999……
+ * 2）一位数
  */
 public class Solution {
     public String nearestPalindromic(String number) {
         if (number == null || number.length() <= 0 || number.length() > 18) {
             return "";
         }
-        String genMirror = ordinaryMirror(number);
-        //两位数需要特殊考虑
-        if (number.length() == 2) {
-            //以0结尾
-            if (number.charAt(1) == '0') {
-                number = String.valueOf(Long.parseLong(number) - 1);
+        //1位数,直接在原来的基础上减1
+        if (number.length() == 1) {
+            int value = Integer.parseInt(number);
+            if (value == 0) {
+                return "";
             }
-            //以9结尾
-            else if (number.charAt(1) == '9') {
-                number = String.valueOf(Long.parseLong(number) + 1);
-            } else {
-                
-            }
-            if (number.equals(new StringBuilder(number).reverse().toString())) {
-                return number;
-            }
+            return String.valueOf(value - 1);
         }
-        //特殊情况
-        if (hasSpecial(number)) {
-            String specialMirror = specialMirror(number);
-            long generalValue = Long.parseLong(genMirror);
-            long specialValue = Long.parseLong(specialMirror);
 
-            long absGeneral = Math.abs(generalValue - Long.parseLong(number));
-            long specialGeneral = Math.abs(specialValue - Long.parseLong(number));
+        //全9的数字
+        if (allNine(number)) {
+            long newvalue = Long.parseLong(number) + 2;
+            return String.valueOf(newvalue);
+        }
 
-            if (absGeneral < specialGeneral) {
-                return genMirror;
-            } else if (absGeneral > specialGeneral) {
-                return specialMirror;
-            } else {
-                return generalValue < specialValue ? genMirror : specialMirror;
+        String result = "";
+        boolean isOdd = number.length() % 2 != 0;
+
+        long diff = Long.MAX_VALUE;
+        int[] increments = {-1, 0, +1};
+        for (int increment : increments) {
+            String left = number.substring(0, (number.length() + 1) / 2);
+            long newValue = Long.parseLong(left) + increment;
+            String mirror = mirror(String.valueOf(newValue), isOdd);
+            if (mirror.length() != number.length() || Long.parseLong(mirror) == 0) {
+                StringBuilder tmp = new StringBuilder();
+                for (int i = 0; i < number.length() - 1; i++) {
+                    tmp.append("9");
+                }
+                mirror = tmp.toString();
+            }
+            long tmpDiff = mirror.equals(number) ? Long.MAX_VALUE : Math.abs(Long.parseLong(mirror) - Long.parseLong(number));
+            if (tmpDiff < diff) {
+                diff = tmpDiff;
+                result = mirror;
+            } else if (tmpDiff == diff) {
+                if (!result.equals("") && Long.parseLong(mirror) < Long.parseLong(result)) {
+                    result = mirror;
+                }
             }
         }
-        //一般情况
-        else {
-            return genMirror;
-        }
+
+        return result;
     }
 
-    private boolean hasSpecial(String number) {
-        int length = number.length();
-        if (length % 2 == 0) {
-            char left = number.charAt(length / 2 - 1);
-//            char right = number.charAt(length / 2);
-            return left == '0' || left == '9';
-        } else {
-            char mid = number.charAt(length / 2);
-            return mid == '0' || mid == '9';
-        }
-    }
-
-    protected String specialMirror(String number) {
-        int len = number.length();
-        if (len == 1) {
-            if (number.charAt(0) == '0') {
-                return "1";
+    private boolean allNine(String number) {
+        for (char c : number.toCharArray()) {
+            if (c != '9') {
+                return false;
             }
         }
-
-        int midIndex = (len % 2 == 0 ? len / 2 - 1 : len / 2);
-        String newValue;
-        if (number.charAt(midIndex) == '0') {
-            String half = number.substring(0, midIndex + 1);
-            long halfValue = Long.parseLong(half);
-            newValue = String.valueOf(halfValue - 1);
-        } else if (number.charAt(midIndex) == '9') {
-            String half = number.substring(0, midIndex + 1);
-            long halfValue = Long.parseLong(half);
-            newValue = String.valueOf(halfValue + 1);
-        } else {
-            newValue = number;
-        }
-        return generateMirror(newValue, 0, newValue.length() - 1, true);
+        return true;
     }
 
-    //普通镜像
-    private String ordinaryMirror(String number) {
-        int len = number.length();
-        if (len == 1) {
-            return String.valueOf(number.charAt(0) - '1');
-        }
-        if (len % 2 == 0) {
-            return generateMirror(number, 0, len / 2 - 1, true);
+    protected String mirror(String left, boolean isOdd) {
+        String right = new StringBuilder(left).reverse().toString();
+        if (isOdd) {
+            return left.substring(0, left.length() - 1) + right;
         } else {
-            return generateMirror(number, 0, len / 2, false);
-        }
-    }
-
-
-    protected String generateMirror(String number, int fromIndex, int toIndex, boolean isInclusive) {
-        if (fromIndex > toIndex || toIndex > number.length() - 1) {
-            return null;
-        }
-        String half;
-        if (isInclusive) {
-            half = number.substring(fromIndex, toIndex + 1);
-            return half + new StringBuilder(half).reverse();
-        } else {
-            half = number.substring(fromIndex, toIndex);
-            return half + number.charAt(toIndex) + new StringBuilder(half).reverse();
+            return left + right;
         }
     }
 
