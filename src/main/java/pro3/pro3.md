@@ -25,3 +25,33 @@
 
 来源：力扣（LeetCode）
 链接：https://leetcode-cn.com/problems/super-palindromes
+
+### 解法
+
+mirror函数，用来返回一个数字的镜像，另外加一个参数，如果为false，则为不包含边界创造镜像，反之则包含边界
+
+for example:
+
+> 1 mirror false -> 1   
+> 1 mirror true  -> 11
+
+
+1位数  1~9            1~9 mirror false
+
+2位数  11~99          1~9 mirror true
+
+3位数  101~999        10~99 mirror false
+
+4位数  1001~9999      10~99 mirror true
+
+5位数  10001~99999    100~999 mirror false
+
+6位数  100001~999999  100~999 mirror true
+
+……
+
+以此类推，可以找到规律
+
+算是半穷举法了吧。
+
+
