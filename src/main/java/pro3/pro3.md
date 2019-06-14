@@ -36,17 +36,17 @@ for example:
 > 1 mirror true  -> 11
 
 
-1位数  1~9            1~9 mirror false
+1位数  1 ~ 9            1 ~ 9 mirror false
 
-2位数  11~99          1~9 mirror true
+2位数  11 ~ 99          1 ~ 9 mirror true
 
-3位数  101~999        10~99 mirror false
+3位数  101 ~ 999        10 ~ 99 mirror false
 
-4位数  1001~9999      10~99 mirror true
+4位数  1001 ~ 9999      10 ~ 99 mirror true
 
-5位数  10001~99999    100~999 mirror false
+5位数  10001 ~ 99999    100 ~ 999 mirror false
 
-6位数  100001~999999  100~999 mirror true
+6位数  100001 ~ 999999  100 ~ 999 mirror true
 
 ……
 
