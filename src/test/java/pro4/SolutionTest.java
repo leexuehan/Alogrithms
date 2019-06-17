@@ -32,6 +32,8 @@ public class SolutionTest {
         String number20 = "0..";
         String number21 = "0.ee-1";
         String number22 = "+-.";
+        String number23 = "+eo";
+        String number24 = "4e+";
 
 
         Solution solution = new Solution();
@@ -57,6 +59,8 @@ public class SolutionTest {
         boolean result20 = solution.isNumber(number20);
         boolean result21 = solution.isNumber(number21);
         boolean result22 = solution.isNumber(number22);
+        boolean result23 = solution.isNumber(number23);
+        boolean result24 = solution.isNumber(number24);
 
         assertTrue(result1);
         assertTrue(result2);
@@ -80,6 +84,8 @@ public class SolutionTest {
         assertFalse(result20);
         assertFalse(result21);
         assertFalse(result22);
+        assertFalse(result23);
+        assertFalse(result24);
 
     }
 }

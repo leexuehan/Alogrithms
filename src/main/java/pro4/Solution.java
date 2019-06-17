@@ -84,14 +84,14 @@ public class Solution {
             if (containsOtherTokens(str)) {
                 return false;
             } else {
-                if(str.contains("+") && str.contains("-")){
+                if (str.contains("+") && str.contains("-")) {
                     return false;
                 }
-                if (str.indexOf('+') != -1) {
-                    return str.indexOf('+') == 0;
+                if (str.indexOf('+') != -1 && str.indexOf('+') != 0) {
+                    return false;
                 }
-                if (str.indexOf('-') != -1) {
-                    return str.indexOf('-') == 0;
+                if (str.indexOf('-') != -1 && str.indexOf('-') != 0) {
+                    return false;
                 }
             }
         }
