@@ -18,84 +18,99 @@ public class Solution {
         if (trim.equals("")) {
             return false;
         }
-        if (containsOtherTokens(trim)) {
-            if (trim.contains("e")) {
-                //times of e is 1
-                if (trim.indexOf('e') != trim.lastIndexOf('e')
-                        || Math.abs(trim.indexOf('e') - trim.indexOf('.')) == 1) {
-                    return false;
-                } else {
-                    String[] splits = trim.split("e");
-                    if (splits.length < 2) {
-                        return false;
-                    } else {
-                        for (String split : splits) {
-                            if (split.equals("")) {
-                                return false;
-                            }
-                        }
-                        return validStr(splits);
-                    }
-                }
 
+        if (trim.contains("e")) {
+            if (appearOnce(trim, 'e')) {
+                String[] splits = trim.split("e");
+                if (isEmpty(splits)) return false;
+                if (splits.length == 1) {
+                    return false;
+                }
+                if (splits.length == 2) {
+                    return validStr(splits[0], true) && validStr(splits[1], false);
+                }
             } else {
                 return false;
             }
-        } else if (trim.contains(".")) {
-            if (trim.indexOf(".") != trim.lastIndexOf(".")) {
-                return false;
-            }
-            String[] splits = trim.split("\\.");
-            if (splits.length > 2) {
-                return false;
-            } else {
-                return validStr(splits);
-            }
+        } else {
+            return validStr(trim, true);
+        }
+        return true;
+    }
 
-        } else if (trim.contains("+") || trim.contains("-")) {
-            int positive = trim.indexOf('+');
-            int negative = trim.indexOf('-');
-            if ((positive != -1 && negative != -1)
-                    || (positive != trim.lastIndexOf('+') ||
-                    negative != trim.lastIndexOf("-"))) {
+    private boolean appearOnce(String str, char token) {
+        return str.indexOf(token) != -1 && str.lastIndexOf(token) == str.indexOf(token);
+    }
+
+    private boolean validStr(String str, boolean isLeft) {
+        if (str.trim().equals("")) {
+            return false;
+        }
+        if (containsOtherTokens(str)) {
+            return false;
+        }
+
+        if (str.contains("+") && str.contains("-")) {
+            return false;
+        }
+        if (str.indexOf('+') != -1) {
+            if (!appearOnce(str, '+')) {
                 return false;
             }
-            //只包含其中一个
-            else {
-                //行首
-                if (positive == 0 || negative == 0) {
-                    return true;
-                } else {
-                    return false;
-                }
+            if (str.length() <= 1 || str.indexOf('+') != 0) {
+                return false;
+            }
+        }
+        if (str.indexOf('-') != -1) {
+            if (!appearOnce(str, '-')) {
+                return false;
+            }
+            if (str.length() <= 1 || str.indexOf('-') != 0) {
+                return false;
             }
         }
 
+        if (str.indexOf('.') != -1) {
+            String[] splits = str.split("\\.");
+            if (isEmpty(splits)) return false;
+            if (isLeft) {
+                //不能出现多次
+                if (str.indexOf(".") != str.lastIndexOf(".")) {
+                    return false;
+                }
+                //小数点两边必须有一个是数字
+                int pointIndex = str.indexOf(".");
+                if (pointIndex == 0) {
+                    if (pointIndex == str.length() - 1 || !Character.isDigit(str.charAt(pointIndex + 1))) {
+                        return false;
+                    }
+                }
+                if (pointIndex == str.length() - 1) {
+                    if (pointIndex == 0 || !Character.isDigit(str.charAt(pointIndex - 1))) {
+                        return false;
+                    }
+                }
+                //小数点不能在正负号前面
+                if (appearOnce(str, '+') && (str.indexOf(".") - str.indexOf("+")) == -1) {
+                    return false;
+                }
+
+                if (appearOnce(str, '-') && (str.indexOf(".") - str.indexOf("-")) == -1) {
+                    return false;
+                }
+            }
+            //右半部分不能有小数点
+            else {
+                return false;
+            }
+        }
 
         return true;
     }
 
-    private boolean validStr(String[] subStr) {
-        List<String> list = Arrays.asList(subStr);
-        if (list.isEmpty()) {
-            return false;
-        }
-        for (String str : subStr) {
-            if (containsOtherTokens(str)) {
-                return false;
-            } else {
-                if (str.contains("+") && str.contains("-")) {
-                    return false;
-                }
-                if (str.indexOf('+') != -1 && str.indexOf('+') != 0) {
-                    return false;
-                }
-                if (str.indexOf('-') != -1 && str.indexOf('-') != 0) {
-                    return false;
-                }
-            }
-        }
-        return true;
+    private boolean isEmpty(String[] splits) {
+        List<String> list = Arrays.asList(splits);
+        return list.isEmpty();
     }
 
 
