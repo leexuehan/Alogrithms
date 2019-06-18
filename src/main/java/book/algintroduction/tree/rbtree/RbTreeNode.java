@@ -1,4 +1,4 @@
-package rbtree;
+package book.algintroduction.tree.rbtree;
 
 /**
  * 红黑树节点

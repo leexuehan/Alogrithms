@@ -1,4 +1,4 @@
-package pro3;
+package leetcode.pro3;
 
 /**
  * @author leexuehan on 2019/6/13.

@@ -1,4 +1,4 @@
-package pro2;
+package leetcode.pro2;
 
 /**
  * 思路一:

@@ -1,4 +1,4 @@
-package pro3;
+package leetcode.pro3;
 
 import org.junit.Test;
 
