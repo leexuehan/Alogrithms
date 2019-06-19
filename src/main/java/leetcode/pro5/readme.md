@@ -132,6 +132,19 @@ i.e:如果 a ~ b，b ~ c, 则a ~ c不一定成立, 这里就涉及到了一个�
 
 ### 广度优先
 
+利用广度优先遍历的思想：
+
+确定一个 ```queue```，来存放遍历的点。
+
+迭代集合 ```A``` 中的元素 ```p```:
+
+类似分层遍历的思想
+
+需要注意的是：
+
+判断包含的时候不小心把 set 写成 list，会导致超时。
+
+
 代码见 [BFSSolution](https://github.com/leexuehan/algorithmpractice/blob/master/src/main/java/leetcode/pro5/BFSSolution.java)
 
 

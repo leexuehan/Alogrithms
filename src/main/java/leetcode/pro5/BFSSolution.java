@@ -14,38 +14,24 @@ public class BFSSolution {
             return 0;
         }
 
-        List<String> visited = new ArrayList<>();
+        Set<String> visited = new HashSet<>();
         Queue<String> queue = new LinkedList<>();
 
         int num = 0;
 
-        boolean[] isVisited = new boolean[A.length];
-
-        for (int i = 0; i < A.length; i++) {
-            if (!isVisited[i]) {
+        for (String a : A) {
+            if (!visited.contains(a)) {
                 num++;
-//                visited.add(a);
-                isVisited[i] = true;
-                queue.add(A[i]);
+                visited.add(a);
+                queue.add(a);
                 while (!queue.isEmpty()) {
                     String elem = queue.poll();
-                    for (int j = 0; j < A.length; j++) {
-                        if(!isVisited[j]){
-                            if (isSimilar(elem, A[j])) {
-                                isVisited[j] = true;
-                                queue.add(A[j]);
-                            }
+                    for (String b : A) {
+                        if (!visited.contains(b) && isSimilar(elem, b)) {
+                            visited.add(b);
+                            queue.add(b);
                         }
                     }
-//                    for (String b : A) {
-//
-//                        if (!visited.contains(b)) {
-//                            if (isSimilar(elem, b)) {
-//                                visited.add(b);
-//                                queue.add(b);
-//                            }
-//                        }
-//                    }
                 }
             }
 
