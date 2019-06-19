@@ -12,7 +12,7 @@ public class SolutionTest {
     @Test
     public void testCase1() throws Exception {
         String[] A = {"rats", "tars", "star", "arts", "stra"};
-        Solution solution = new Solution();
+        DFSSolution solution = new DFSSolution();
         int groups = solution.numSimilarGroups(A);
         assertEquals(2, groups);
     }
@@ -21,7 +21,7 @@ public class SolutionTest {
     public void testCase2() throws Exception {
         String[] A = {"kccomwcgcs", "socgcmcwkc", "sgckwcmcoc", "coswcmcgkc", "cowkccmsgc",
                 "cosgmccwkc", "sgmkwcccoc", "coswmccgkc", "kowcccmsgc", "kgcomwcccs"};
-        Solution solution = new Solution();
+        DFSSolution solution = new DFSSolution();
         int groups = solution.numSimilarGroups(A);
         assertEquals(5, groups);
     }
