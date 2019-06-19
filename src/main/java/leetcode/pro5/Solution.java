@@ -10,66 +10,52 @@ public class Solution {
         if (A == null || A.length == 0) {
             return 0;
         }
-        Set<List> groupSet = new HashSet<>();
-        List<String> group = new ArrayList<>();
-        group.add(A[0]);
-        groupSet.add(group);
+        Set<List<String>> groupSet = new HashSet<>();
 
-        for (int i = 1; i < A.length; i++) {
-            for (List<String> list : groupSet) {
-                for (String s : list) {
-                    if (isSimilarTo(A[i], s)) {
-
-                    }
-
+        for (int i = 0; i < A.length; i++) {
+            boolean found = false;
+            for (List<String> g : groupSet) {
+                if (hasSimilars(g, A[i])) {
+                    System.out.println("add[" + A[i] + "] to group:" + g);
+                    g.add(A[i]);
+                    found = true;
+                    break;
                 }
+            }
+            if (!found) {
+                List<String> newGroup = new ArrayList<>();
+                newGroup.add(A[i]);
+                groupSet.add(newGroup);
+                System.out.println("not found, create new group:" + newGroup);
             }
         }
 
-
-        return 0;
+        System.out.println(groupSet);
+        return groupSet.size();
     }
 
-    protected boolean isSimilarTo(String str1, String str2) {
-        if (str1 == null || str2 == null) {
-            return false;
+    private boolean hasSimilars(List<String> g, String s) {
+        for (String ele : g) {
+            if (hammingDistance(ele, s) == 2) {
+                return true;
+            }
         }
-        if (str1.equals("") || str2.equals("")) {
-            return false;
-        }
+        return false;
+    }
 
-        if (str1.length() != str2.length()) {
-            return false;
-        }
-
+    private int hammingDistance(String str1, String str2) {
         int index = 0;
         int distance = 0;
-        List<char[]> diffs = new ArrayList<>();
         while (index < str1.length()) {
             char c1 = str1.charAt(index);
             char c2 = str2.charAt(index);
             if (c1 != c2) {
                 distance += 1;
-                if (distance > 2) {
-                    return false;
-                }
-                diffs.add(new char[]{c1, c2});
             }
             index++;
         }
 
-        if (diffs.isEmpty() || diffs.size() < 2) {
-            return false;
-        }
-
-        char[] group1 = diffs.get(0);
-        char[] group2 = diffs.get(1);
-
-        if (group1[0] != group2[1] || group1[1] != group2[0]) {
-            return false;
-        }
-
-        return true;
+        return distance;
     }
 
 }

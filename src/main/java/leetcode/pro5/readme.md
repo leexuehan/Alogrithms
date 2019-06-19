@@ -44,3 +44,80 @@
 
   来源：力扣（LeetCode）
   链接：https://leetcode-cn.com/problems/similar-string-groups
+
+
+#### 思路
+
+本题也耗费了比较长的时间，原因有以下几点：
+
+1. 审题没有审清楚，多余考虑了一些异常情况
+2. 思想没有很严谨，没有考虑到本题的“相似性不可达”的特性(
+i.e:如果 a ~ b，b ~ c, 则a ~ c不一定成立, 这里就涉及到了一个顺序性的问题，如果遍历顺序为:a,b,c 则
+最终的结果为 {a,b,c}，如果遍历的顺序:a,c,b，则最终的结果为 {{a},{c,b}})
+
+##### 错误代码
+
+```java
+        public int numSimilarGroups(String[] A) {
+                if (A == null || A.length == 0) {
+                    return 0;
+                }
+                Set<List<String>> groupSet = new HashSet<>();
+        
+                for (int i = 0; i < A.length; i++) {
+                    boolean found = false;
+                    for (List<String> g : groupSet) {
+                        if (hasSimilars(g, A[i])) {
+                            System.out.println("add[" + A[i] + "] to group:" + g);
+                            g.add(A[i]);
+                            found = true;
+                            //这里简单 break会有问题，如果有多个group都能匹配上，则会出现上面说的传递性问题
+                            break;
+                        }
+                    }
+                    if (!found) {
+                        List<String> newGroup = new ArrayList<>();
+                        newGroup.add(A[i]);
+                        groupSet.add(newGroup);
+                        System.out.println("not found, create new group:" + newGroup);
+                    }
+                }
+        
+                System.out.println(groupSet);
+                return groupSet.size();
+            }
+        
+            private boolean hasSimilars(List<String> g, String s) {
+                for (String ele : g) {
+                    if (hammingDistance(ele, s) == 2) {
+                        return true;
+                    }
+                }
+                return false;
+            }
+        
+            //利用汉明距离判断是否相似
+            private int hammingDistance(String str1, String str2) {
+                int index = 0;
+                int distance = 0;
+                while (index < str1.length()) {
+                    char c1 = str1.charAt(index);
+                    char c2 = str2.charAt(index);
+                    if (c1 != c2) {
+                        distance += 1;
+                    }
+                    index++;
+                }
+        
+                return distance;
+            }
+
+```
+
+
+##### 正确代码
+
+利用深度优先遍历的思想：
+
+
+

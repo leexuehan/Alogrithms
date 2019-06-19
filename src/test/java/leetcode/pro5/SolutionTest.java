@@ -11,20 +11,18 @@ public class SolutionTest {
 
     @Test
     public void testCase1() throws Exception {
+        String[] A = {"rats", "tars", "star", "arts", "stra"};
         Solution solution = new Solution();
-        String str1 = "abc";
-        String str2 = "bac";
-        boolean result = solution.isSimilarTo(str1, str2);
-        assertTrue(result);
+        int groups = solution.numSimilarGroups(A);
+        assertEquals(2, groups);
+    }
 
-        String str3 = "cba";
-        boolean b = solution.isSimilarTo(str2, str3);
-        assertFalse(b);
-
-        String str4 = "abcd";
-        boolean b1 = solution.isSimilarTo(str1, str4);
-        assertFalse(b1);
-
-
+    @Test
+    public void testCase2() throws Exception {
+        String[] A = {"kccomwcgcs", "socgcmcwkc", "sgckwcmcoc", "coswcmcgkc", "cowkccmsgc",
+                "cosgmccwkc", "sgmkwcccoc", "coswmccgkc", "kowcccmsgc", "kgcomwcccs"};
+        Solution solution = new Solution();
+        int groups = solution.numSimilarGroups(A);
+        assertEquals(5, groups);
     }
 }
