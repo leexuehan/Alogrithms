@@ -115,7 +115,7 @@ i.e:如果 a ~ b，b ~ c, 则a ~ c不一定成立, 这里就涉及到了一个�
 ```
 
 
-##### 正确解法
+### 深度优先
 
 利用深度优先遍历的思想：
 
@@ -123,10 +123,18 @@ i.e:如果 a ~ b，b ~ c, 则a ~ c不一定成立, 这里就涉及到了一个�
 
 迭代集合 ```A``` 中的元素 ```p```:
 
-将 ```p``` 与数组 ```A``` 中的所有元素进行匹配判断，将所有匹配的元素加入到
-```visted```集合中，并继续递归遍历直到所有的匹配元素都已经加入到集合中
+将 ```p``` 与数组 ```A``` 中的所有元素进行匹配判断，将所有访问过的元素加入到集合 ```visited``` 中，将所有匹配的元素加入到
+```group```集合中，并继续递归遍历直到所有的匹配元素都已经加入到集合中.
 
-继续新一轮的遍历，如果发现元素 ```p``` 不在 ```visited``` 集合中，说明是一个新的 group 中的元素
+继续新一轮的遍历，如果发现元素 ```p``` 不在 ```visited``` 集合中，说明是一个新的 ```group``` 中的元素.
+
+代码见 [DFSSolution](https://github.com/leexuehan/algorithmpractice/blob/master/src/main/java/leetcode/pro5/DFSSolution.java)
+
+### 广度优先
+
+代码见 [BFSSolution](https://github.com/leexuehan/algorithmpractice/blob/master/src/main/java/leetcode/pro5/BFSSolution.java)
+
+
 
 
 
