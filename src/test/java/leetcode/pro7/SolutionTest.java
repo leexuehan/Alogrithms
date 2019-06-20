@@ -45,5 +45,4 @@ public class SolutionTest {
 
         assertEquals(expected, actual);
     }
-
 }

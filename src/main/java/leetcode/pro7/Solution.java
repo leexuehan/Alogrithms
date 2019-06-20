@@ -9,32 +9,36 @@ import java.util.Set;
  * @author leexuehan on 2019/6/20.
  */
 public class Solution {
-    private Set<String> resSet = new HashSet<>();
+
+    private List<String> output = new ArrayList<>();
 
     public List<String> letterCasePermutation(String S) {
-        if (S == null) {
-            return null;
-        }
-        resSet.add(S);
-        backTrack(S, 0);
-        return new ArrayList<>(resSet);
+        StringBuilder sb = new StringBuilder();
+        backTrack(sb, S, 0);
+        return output;
     }
 
-    private void backTrack(String s, int start) {
-        if (start >= s.length()) {
+    private void backTrack(StringBuilder sb, String S, int index) {
+        if (index == S.length()) {
+            output.add(sb.toString());
             return;
         }
-        for (int index = start; index < s.length(); index++) {
-            char c = s.charAt(index);
-            if (Character.isAlphabetic(c)) {
-                char updated = Character.isUpperCase(c) ? Character.toLowerCase(c) : Character.toUpperCase(c);
-                StringBuilder sb = new StringBuilder(s);
-                sb.setCharAt(index, updated);
-                resSet.add(sb.toString());
-                backTrack(sb.toString(), index + 1);
-            } else {
-                backTrack(s, index + 1);
-            }
+
+        char c = S.charAt(index);
+        if (Character.isAlphabetic(c)) {
+            sb.append(Character.toLowerCase(c));
+            backTrack(sb, S, index + 1);
+            //清理上次遍历添加的字符串,体现回溯
+            sb.delete(index, sb.length());
+            sb.append(Character.toUpperCase(c));
+            backTrack(sb, S, index + 1);
+            sb.delete(index, sb.length());
+        }
+        //如果是数字，跳过
+        else {
+            sb.append(c);
+            backTrack(sb, S, index + 1);
+            sb.delete(index, sb.length());
         }
     }
 }
