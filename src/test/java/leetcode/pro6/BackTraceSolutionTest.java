@@ -7,10 +7,10 @@ import static org.junit.Assert.*;
 /**
  * @author leexuehan on 2019/6/20.
  */
-public class SolutionTest {
+public class BackTraceSolutionTest {
     @Test
     public void testCase1() throws Exception {
-        Solution solution = new Solution();
+        BackTraceSolution solution = new BackTraceSolution();
 
         String s1 = "aa";
         String p1 = "a";
@@ -37,5 +37,6 @@ public class SolutionTest {
         String p5 = "mis*is*p*.";
         boolean match5 = solution.isMatch(s5, p5);
         assertFalse(match5);
+
     }
 }
