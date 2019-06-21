@@ -10,7 +10,8 @@ import static org.junit.Assert.*;
 public class BinaryWatchTest {
     @Test
     public void readBinaryWatch() throws Exception {
-
+        BinaryWatch watch = new BinaryWatch();
+        watch.readBinaryWatch(2);
     }
 
 }

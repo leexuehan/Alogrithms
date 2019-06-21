@@ -1,5 +1,6 @@
 package leetcode.pro8;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -7,39 +8,62 @@ import java.util.List;
  * @author leexuehan on 2019/6/20.
  */
 public class BinaryWatch {
-    //表示分钟，从低位到高位的权值分别为：1、2、4、8、16、32
-    private int[] minutes = new int[6];
-    //表示小时，从低位到高位的权值分别为：1、2、4、8
-    private int[] hours = new int[4];
+    //表示时间，高四位表示小时，低六位表示分钟。从低位到高位的权值分别为：1、2、4、8、16、32、1、2、4、8
+    private final int[] binaryTime = new int[10];
+    private List<String> results = new ArrayList<>();
 
     public List<String> readBinaryWatch(int num) {
-        return null;
+        backTrackTime(0, num);
+        return results;
     }
 
-    public List<String> getMinutes(int num) {
-        backTrack(0, num, num);
-        return null;
-    }
-
-    private void backTrack(int index, int numLeft, int targetNum) {
-        if (index >= minutes.length || numLeft == targetNum) {
-            //输出结果
-            System.out.println(Arrays.toString(minutes));
+    private void backTrackTime(int index, int num) {
+        if (num <= 0) {
+            //输出时间
+            String time = outputTime(binaryTime);
+            if (time != null) {
+                results.add(time);
+            }
             return;
         }
-        minutes[index] = 1;
-        numLeft -= 1;
-        backTrack(index + 1, numLeft, targetNum);
-        minutes[index] = 0;
-        numLeft += 1;
-        backTrack(index + 1, numLeft, targetNum);
+
+        if (index < binaryTime.length) {
+            binaryTime[index] = 1;
+            num--;
+            backTrackTime(index + 1, num);
+            binaryTime[index] = 0;
+            num++;
+            backTrackTime(index + 1, num);
+        }
 
     }
 
-    public static void main(String[] args) {
-        BinaryWatch binaryWatch = new BinaryWatch();
-        binaryWatch.getMinutes(1);
+    private String outputTime(int[] binaryTime) {
+        String hour;
+        int hourValue = 0;
+        for (int i = 0; i < 4; i++) {
+            hourValue += (1 << (3 - i)) * binaryTime[i];
+        }
+        if (hourValue >= 12) {
+            return null;
+        } else {
+            hour = String.valueOf(hourValue);
+        }
+
+        String minutes;
+        int minutesValue = 0;
+        for (int i = 4; i < 10; i++) {
+            minutesValue += (1 << (9 - i)) * binaryTime[i];
+        }
+
+        if (minutesValue < 10) {
+            minutes = "0" + minutesValue;
+        } else if (minutesValue > 59) {
+            return null;
+        } else {
+            minutes = String.valueOf(minutesValue);
+        }
+
+        return hour + ":" + minutes;
     }
-
-
 }
