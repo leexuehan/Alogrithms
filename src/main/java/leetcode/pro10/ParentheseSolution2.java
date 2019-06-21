@@ -21,7 +21,6 @@ public class ParentheseSolution2 {
 
     private void backTracking(int left, int right, String str, int num) {
         if (left == num && right == num) {
-            System.out.println(str);
             result.add(str);
             return;
         }
