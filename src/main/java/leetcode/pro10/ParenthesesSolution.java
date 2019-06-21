@@ -1,7 +1,6 @@
 package leetcode.pro10;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Stack;
 
@@ -19,11 +18,14 @@ public class ParenthesesSolution {
         }
         int num = n * 2;//括号个数
         char[] parentheses = new char[num];
-        backTrack(parentheses, 0, num);
+        backTrack(parentheses, 0, 0, num);
         return result;
     }
 
-    private void backTrack(char[] parentheses, int startIndex, int num) {
+    private void backTrack(char[] parentheses, int startIndex, int leftParentheseNum, int num) {
+        if (leftParentheseNum > parentheses.length / 2) {
+            return;
+        }
         if (num <= 0) {
             //output
             if (isValid(parentheses)) {
@@ -36,9 +38,11 @@ public class ParenthesesSolution {
             //无论是左括号还是右括号，都占了一个位子，所以剩下的位子数就要减1
             num--;
             parentheses[startIndex] = LEFT;
-            backTrack(parentheses, startIndex + 1, num);
+            leftParentheseNum++;
+            backTrack(parentheses, startIndex + 1, leftParentheseNum, num);
             parentheses[startIndex] = RIGHT;
-            backTrack(parentheses, startIndex + 1, num);
+            leftParentheseNum--;
+            backTrack(parentheses, startIndex + 1, leftParentheseNum, num);
         }
     }
 
