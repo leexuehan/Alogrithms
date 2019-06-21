@@ -1,6 +1,7 @@
 package leetcode.pro8;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -19,6 +20,7 @@ public class BinaryWatch {
     private void backTrackTime(int index, int num) {
         if (num <= 0) {
             //输出时间
+            System.out.println(Arrays.toString(binaryTime));
             String time = outputTime(binaryTime);
             if (time != null) {
                 results.add(time);
