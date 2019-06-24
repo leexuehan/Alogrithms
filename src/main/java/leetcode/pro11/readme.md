@@ -34,4 +34,4 @@ Could you do both operations in <strong>O(1)</strong> time complexity?
             cache.get(4);       // returns 4
             
             
-[lru-cache](https://leetcode.com/problems/lru-cache/)
+leetcode题目链接:[lru-cache](https://leetcode.com/problems/lru-cache/)
