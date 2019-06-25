@@ -109,4 +109,22 @@ public class LRUCacheTest {
         assertEquals(-1, cache.get(3));
         assertEquals(3, cache.get(4));
     }
+
+    @Test
+    public void testCase8() throws Exception {
+        LRUCache cache = new LRUCache(10);
+
+        cache.put(10, 13);
+        cache.put(3, 17);
+        cache.put(6, 11);
+        cache.put(10, 5);
+        cache.put(9, 10);
+        cache.get(13);
+        cache.put(2,19);
+        cache.get(2);
+        cache.put(2, 1);
+
+
+
+    }
 }

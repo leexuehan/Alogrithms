@@ -1,6 +1,7 @@
 package leetcode.pro11;
 
 import java.util.HashMap;
+import java.util.LinkedList;
 
 /**
  * @author leexuehan on 2019/6/24.
@@ -8,107 +9,63 @@ import java.util.HashMap;
  *         手写 LRUCache(Least Recently Used) 算法
  */
 public class LRUCache {
-    private final int MAX_CAPACITY;
-    private Node head;
-    private Node tail;
+    private final int capacity;
 
+    //use map to store values in order to get value in time complexity:O(1)
     private HashMap<Integer, Node> map = new HashMap<>();
+    //use list to save values in order to delete node which is Least Recently Used.
+    private LinkedList<Node> list = new LinkedList<>();
 
-    //利用双向循环链表实现
+    private final class Node {
+        int key;
+        int value;
 
-    //双向循环链表中的一个结点
-    class Node {
-        Node prev;
-        Node next;
-        Integer key;
-        Integer value;
-
-        Node(Integer key, Integer value) {
+        Node(int key, int value) {
             this.key = key;
             this.value = value;
-            this.prev = null;
-            this.next = null;
         }
     }
 
-
     public LRUCache(int capacity) {
-        if (capacity <= 0) {
-            throw new IllegalArgumentException("capacity:" + capacity + "(expected > 0)");
-        }
-        MAX_CAPACITY = capacity;
-        head = new Node(null, null);
-        tail = new Node(null, null);
-        head.next = tail;
-        tail.prev = head;
+        this.capacity = capacity;
+
     }
 
     public int get(int key) {
         Node node = map.get(key);
         if (node != null) {
-            //添加到链表结尾
-            appendToTail(node);
-            //删除链表头
-            deleteHead();
+            list.remove(node);
+            list.addLast(node);
             return node.value;
-        } else {
+        }
+        //not exists
+        else {
             return -1;
         }
+
     }
 
     public void put(int key, int value) {
-        Node n = map.get(key);
-        //if exists
-        if (n != null) {
-            Node newNode = new Node(key, value);
-            //override map if exists
-            map.put(key, newNode);
-            //添加到链表结尾
-            appendToTail(newNode);
-            //删除链表头
-            deleteHead();
+        Node node = map.get(key);
+        //if key exists,then change the value of key
+        if (node != null) {
+            node.value = value;
+            map.put(key, node);
+            list.remove(node);
+            list.addLast(node);
             return;
         }
-        Node node = new Node(key, value);
-        //update list first
-        //满了
-        if (map.size() == MAX_CAPACITY) {
-            //添加到链表结尾
-            appendToTail(node);
-            //删除链表头
-            map.remove(head.key);
-            deleteHead();
-        }
-        //添加到链表的结尾
-        else {
-            appendToTail(node);
+        //key not exists
+        if (list.size() == capacity) {
+            //delete LRU node
+            Node removed = list.removeFirst();
+            map.remove(removed.key);
         }
 
-        //update map
+        node = new Node(key, value);
+        list.addLast(node);
         map.put(key, node);
-
-    }
-
-    private void deleteHead() {
-        Node old = head;
-        head.next = old.next;
-        old.prev = head;
-        old = null;
-    }
-
-    private void appendToTail(Node node) {
-        node.next = tail.next;
-        node.prev = tail.prev;
-
-        node.prev.next = node;
-        tail.prev = node;
     }
 
 }
 
-/*
- * Your LRUCache object will be instantiated and called as such:
- * LRUCache obj = new LRUCache(capacity);
- * int param_1 = obj.get(key);
- * obj.put(key,value);
- */
