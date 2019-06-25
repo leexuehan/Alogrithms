@@ -1,6 +1,6 @@
 package leetcode.pro11;
 
-import java.util.LinkedHashMap;
+import java.util.HashMap;
 
 /**
  * @author leexuehan on 2019/6/24.
@@ -12,6 +12,8 @@ public class LRUCache {
     private int elemNum = 0;
     private Node head;
     private Node tail;
+
+    private HashMap<Integer, Node> map = new HashMap<>();
 
     //利用双向循环链表实现
 
@@ -36,30 +38,39 @@ public class LRUCache {
             throw new IllegalArgumentException("capacity:" + capacity + "(expected > 0)");
         }
         MAX_CAPACITY = capacity;
+
+        head = new Node(null, null);
+        tail = new Node(null, null);
     }
 
     public int get(int key) {
-        Node cur = head;
-        while (cur != tail) {
-            if (cur.key == key) {
-                //添加到链表结尾
-                appendToTail(cur.key, cur.value);
-                //删除链表头
-                Node oldHead = head;
-                head = oldHead.next;
-                oldHead = null;
-                return cur.value;
-            }
-            cur = cur.next;
+        Node node = map.get(key);
+        if (node != null) {
+            //添加到链表结尾
+            appendToTail(node);
+            //删除链表头
+            deleteHead();
+            return node.value;
+        } else {
+            return -1;
         }
-
-        return -1;
     }
 
     public void put(int key, int value) {
+        Node n = map.get(key);
+        if (n != null) {
+            Node newNode = new Node(key, value);
+            map.put(key, newNode);
+            //添加到链表结尾
+            appendToTail(newNode);
+            //删除链表头
+            deleteHead();
+            return;
+        }
+        Node node = new Node(key, value);
+        //update list
         //空
         if (elemNum == 0) {
-            Node node = new Node(key, value);
             head = node;
             tail = node;
             head.next = tail;
@@ -69,24 +80,35 @@ public class LRUCache {
         //满了
         else if (elemNum == MAX_CAPACITY) {
             //添加到链表结尾
-            appendToTail(key, value);
+            appendToTail(node);
             //删除链表头
-            Node oldHead = head;
-            head = oldHead.next;
-            oldHead = null;
+            map.remove(head.key);
+            deleteHead();
         }
         //添加到链表的结尾
         else {
-            appendToTail(key, value);
+            appendToTail(node);
             elemNum++;
         }
+
+        //update map
+        map.put(key, node);
+
     }
 
-    private void appendToTail(int key, int value) {
-        Node node = new Node(key, value);
-        tail.next = node;
-        node.prev = tail;
-        tail = node;
+    private void deleteHead() {
+        Node old = head;
+        head.next = old.next;
+        old.prev = head;
+        old = null;
+    }
+
+    private void appendToTail(Node node) {
+        node.next = tail.next;
+        node.prev = tail.prev;
+
+        node.prev.next = node;
+        tail.prev = node;
     }
 
 }
