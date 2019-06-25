@@ -9,7 +9,6 @@ import java.util.HashMap;
  */
 public class LRUCache {
     private final int MAX_CAPACITY;
-    private int elemNum = 0;
     private Node head;
     private Node tail;
 
@@ -24,7 +23,7 @@ public class LRUCache {
         Integer key;
         Integer value;
 
-        public Node(Integer key, Integer value) {
+        Node(Integer key, Integer value) {
             this.key = key;
             this.value = value;
             this.prev = null;
@@ -38,9 +37,10 @@ public class LRUCache {
             throw new IllegalArgumentException("capacity:" + capacity + "(expected > 0)");
         }
         MAX_CAPACITY = capacity;
-
         head = new Node(null, null);
         tail = new Node(null, null);
+        head.next = tail;
+        tail.prev = head;
     }
 
     public int get(int key) {
@@ -58,8 +58,10 @@ public class LRUCache {
 
     public void put(int key, int value) {
         Node n = map.get(key);
+        //if exists
         if (n != null) {
             Node newNode = new Node(key, value);
+            //override map if exists
             map.put(key, newNode);
             //添加到链表结尾
             appendToTail(newNode);
@@ -68,17 +70,9 @@ public class LRUCache {
             return;
         }
         Node node = new Node(key, value);
-        //update list
-        //空
-        if (elemNum == 0) {
-            head = node;
-            tail = node;
-            head.next = tail;
-            tail.next = head;
-            elemNum++;
-        }
+        //update list first
         //满了
-        else if (elemNum == MAX_CAPACITY) {
+        if (map.size() == MAX_CAPACITY) {
             //添加到链表结尾
             appendToTail(node);
             //删除链表头
@@ -88,7 +82,6 @@ public class LRUCache {
         //添加到链表的结尾
         else {
             appendToTail(node);
-            elemNum++;
         }
 
         //update map
