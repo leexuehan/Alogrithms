@@ -190,11 +190,21 @@ public class HashMap<K, V> implements Map<K, V> {
                         Node<K, V> next;
                         do {
                             next = e.next;
+                            //no need to change
                             if ((e.hash & oldCapacity) == 0) {
+                                if (loTail == null) {
+                                    
 
+                                }
+                                //
+                                else {
+
+
+                                }
                             }
-                            //
+                            //need to change
                             else {
+
 
                             }
 
