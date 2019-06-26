@@ -4,7 +4,20 @@
 
 ### hashMap 链表扩容机制
 
+
+扩容前
+
 ![扩容前HashMap](./imgs/beforeExpand.jpg)
+
+扩容后
+
+![扩容后HashMap](./imgs/afterExpand.jpg)
+
+链表复制
+
+![链表复制](./imgs/changeIndex.jpg)
+
+
 
 
 #### 参考文献:
