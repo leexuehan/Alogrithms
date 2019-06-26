@@ -60,4 +60,7 @@ public class DFSSolution {
         return distance;
     }
 
+    public boolean isMatch(String s2, String p2) {
+        return false;
+    }
 }

@@ -1,5 +1,6 @@
 package leetcode.pro6;
 
+import leetcode.pro5.DFSSolution;
 import org.junit.Test;
 
 import static org.junit.Assert.*;
@@ -10,7 +11,7 @@ import static org.junit.Assert.*;
 public class BackTraceSolutionTest {
     @Test
     public void testCase1() throws Exception {
-        BackTraceSolution solution = new BackTraceSolution();
+        DFSSolution solution = new DFSSolution();
 
         String s1 = "aa";
         String p1 = "a";
