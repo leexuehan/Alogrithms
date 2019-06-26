@@ -13,11 +13,14 @@ public class HashMap<K, V> implements Map<K, V> {
     static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
 
+    static final int DEFAULT_INITIAL_CAPACITY = 1 << 4;
+
+
     //after the list size exceeds this threshold, it will become a rb tree.
     static final int TREEIFY_THRESHOLD = 8;
 
-
     static final int UNTREEIFY_THRESHOLD = 6;
+
 
     //store nodes
     transient Node<K, V>[] table;
@@ -26,11 +29,9 @@ public class HashMap<K, V> implements Map<K, V> {
     //the size of map
     transient int size;
 
-
     transient int modCount;
 
     int threshold;
-
     final float loadFactor;
 
 
@@ -94,11 +95,123 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     private static int hash(Object key) {
-        return 0;
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h >>> 16);
     }
 
+    //initializes or doubles table size
     private Node<K, V>[] resize() {
-        return new Node[0];
+        Node<K, V>[] oldTable = table;
+        int oldCapacity = (oldTable == null) ? 0 : oldTable.length;
+        int oldThreshold = threshold;
+        int newCapacity = 0;
+        int newThreshold = 0;
+
+
+        if (oldCapacity > 0) {
+            if (oldCapacity >= MAX_CAPACITY) {
+                threshold = Integer.MAX_VALUE;
+                return oldTable;
+            }
+            //double capacity
+            newCapacity = oldCapacity << 1;
+            if (newCapacity < MAX_CAPACITY && oldCapacity >= DEFAULT_INITIAL_CAPACITY) {
+                //double threshold
+                newThreshold = oldThreshold << 1;
+            }
+        }
+        // oldCapacity = 0 && oldThreshold > 0
+        else if (oldThreshold > 0) {
+            newCapacity = oldThreshold;
+        }
+        // oldCapacity = 0 && oldThreshold = 0
+        else {
+            newCapacity = DEFAULT_INITIAL_CAPACITY;
+            newThreshold = (int) (DEFAULT_INITIAL_CAPACITY * DEFAULT_LOAD_FACTOR);
+        }
+
+        if (newThreshold == 0) {
+            float ft = (float) newCapacity * loadFactor;
+            if (newCapacity < MAX_CAPACITY && ft < (float) MAX_CAPACITY) {
+                newThreshold = (int) ft;
+            }
+            //otherwise
+            else {
+                newThreshold = Integer.MAX_VALUE;
+            }
+        }
+
+        //get new threshold
+        threshold = newThreshold;
+        //new array
+        Node<K, V>[] newTab = (Node<K, V>[]) new Node[newCapacity];
+        table = newTab;
+        //need to copy data from old table
+        if (oldTable != null) {
+            for (int i = 0; i < oldCapacity; i++) {
+                //get the element from the old bucket
+                Node<K, V> e = oldTable[i];
+                if (e != null) {
+                    //free the memory of the old bucket
+                    oldTable[i] = null;
+                    //just ordinary nodes
+                    if (e.next == null) {
+                        //find index and insert to new array
+                        newTab[e.hash & (newCapacity - 1)] = e;
+                    }
+                    //there is a tree
+                    else if (e instanceof TreeNode) {
+
+                    }
+                    //there is a list under the node at this position,so need to preserve the order
+                    else {
+                        /*
+                         * after the capacity been doubled, index of some nodes in the bucket will be changed,
+                         * while others not.
+                         *
+                         * so there is a condition that can differentiate them:
+                         *
+                         * e.hash & oldCapacity == 0:
+                         *      means that index of nodes will not change, so just hang them under the same index in the new table.
+                         * e.hash & oldCapacity != 0:
+                         *      means that index of nodes will change to new index, so there is need to hang them under a different index
+                         * in the new table.
+                         *
+                         * the meanings of the pointers below:
+                         * - loHead: the head of node list whose index will <strong>not</strong> change.
+                         * - loTail: the tail of node list whose index will <strong>not</strong> change.
+                         * - hiHead: the head of node list whose index will be changed.
+                         * - hiTail: the tail of node list whose index will be changed.
+                         */
+                        Node<K, V> loHead = null;
+                        Node<K, V> loTail = null;
+                        Node<K, V> hiHead = null;
+                        Node<K, V> hiTail = null;
+                        Node<K, V> next;
+                        do {
+                            next = e.next;
+                            if ((e.hash & oldCapacity) == 0) {
+
+                            }
+                            //
+                            else {
+
+                            }
+
+                        } while ((e = next) != null);
+
+                        if (loTail != null) {
+
+                        }
+                        if (hiTail != null) {
+
+                        }
+                    }
+                }
+            }
+
+        }
+        return newTab;
     }
 
     @Override
@@ -145,6 +258,14 @@ public class HashMap<K, V> implements Map<K, V> {
             V oldValue = value;
             value = newValue;
             return oldValue;
+        }
+    }
+
+    static final class TreeNode<K, V> extends Node<K, V> {
+
+
+        public TreeNode(int hash, K key, V value, Node<K, V> next) {
+            super(hash, key, value, next);
         }
     }
 }
