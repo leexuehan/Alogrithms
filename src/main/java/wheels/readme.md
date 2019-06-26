@@ -4,7 +4,7 @@
 
 ### hashMap 链表扩容机制
 
-![扩容前HashMap](./beforeExpand.jpg)
+![扩容前HashMap](./imgs/beforeExpand.jpg)
 
 
 #### 参考文献:
