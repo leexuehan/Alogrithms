@@ -11,7 +11,7 @@
 
 扩容后
 
-![扩容后HashMap](./imgs/afterExpand.jpg)
+![扩容后HashMap](./imgs/resize.jpg)
 
 链表复制
 
