@@ -193,28 +193,34 @@ public class HashMap<K, V> implements Map<K, V> {
                             //no need to change
                             if ((e.hash & oldCapacity) == 0) {
                                 if (loTail == null) {
-                                    
-
+                                    loHead = e;
                                 }
                                 //
                                 else {
-
-
+                                    loTail.next = e;
                                 }
+                                loTail = e;
                             }
                             //need to change
                             else {
-
-
+                                if (hiTail == null) {
+                                    hiHead = e;
+                                }
+                                //
+                                else {
+                                    hiTail.next = e;
+                                }
+                                hiTail = e;
                             }
-
                         } while ((e = next) != null);
 
                         if (loTail != null) {
-
+                            table[i] = loHead;
+                            loTail.next = null;
                         }
                         if (hiTail != null) {
-
+                            table[i + oldCapacity] = hiHead;
+                            hiTail.next = null;
                         }
                     }
                 }
