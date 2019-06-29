@@ -12,7 +12,7 @@ public interface Map<K, V> {
 
     boolean containsValue(Object value);
 
-    void put(K key, V value);
+    V put(K key, V value);
 
     V get(Object key);
 

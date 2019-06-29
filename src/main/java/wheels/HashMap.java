@@ -69,7 +69,7 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     @Override
-    public void put(K key, V value) {
+    public V put(K key, V value) {
         Node<K, V>[] tab;
         Node<K, V> p;
         int len;
@@ -78,16 +78,56 @@ public class HashMap<K, V> implements Map<K, V> {
             len = tab.length;
         }
 
-        int hash = hash(key);
+        int hash = hash(key); // the hash value of new node
         int index = (len - 1) & hash;
         p = tab[index];
+        //there is no node in the bucket
         if (p == null) {
             tab[index] = newNode(hash, key, value, null);
         }
         //hash conflicts:already exists a node
         else {
-
+            Node<K, V> e;
+            K k = p.key;
+            //both hashcode and key value equals
+            if ((p.hash == hash && (k == key)) || (key != null && key.equals(k))) {
+                e = p;
+            }
+            // insert node to a tree
+            else if (p instanceof TreeNode) {
+                e = putTreeValue();
+            }
+            // insert node to a list
+            else {
+                for (int binCount = 0; ; ++binCount) {
+                    e = p.next;
+                    if (e == null) {
+                        e = newNode(hash, key, value, null);
+                        p.next = e;
+                        if (binCount >= TREEIFY_THRESHOLD - 1) {
+                            treeifyBin(tab, hash);
+                        }
+                        break;
+                    }
+                    k = e.key;
+                    if (e.hash == hash && k == key || key != null && key.equals(k)) {
+                        break;
+                    }
+                    //next node
+                    p = e;
+                }
+            }
+            if (e != null) {
+                V oldValue = e.value;
+                e.value = value;
+                return oldValue;
+            }
         }
+        return null;
+    }
+
+    private void treeifyBin(Node<K, V>[] tab, int hash) {
+
     }
 
     private Node<K, V> newNode(int hash, K key, V value, Node<K, V> next) {
@@ -144,6 +184,7 @@ public class HashMap<K, V> implements Map<K, V> {
         //get new threshold
         threshold = newThreshold;
         //new array
+        @SuppressWarnings("unchecked")
         Node<K, V>[] newTab = (Node<K, V>[]) new Node[newCapacity];
         table = newTab;
         //need to copy data from old table
@@ -161,7 +202,7 @@ public class HashMap<K, V> implements Map<K, V> {
                     }
                     //there is a tree
                     else if (e instanceof TreeNode) {
-
+                        //todo tree
                     }
                     //there is a list under the node at this position,so need to preserve the order
                     else {
@@ -278,8 +319,6 @@ public class HashMap<K, V> implements Map<K, V> {
     }
 
     static final class TreeNode<K, V> extends Node<K, V> {
-
-
         public TreeNode(int hash, K key, V value, Node<K, V> next) {
             super(hash, key, value, next);
         }
