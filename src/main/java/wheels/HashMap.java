@@ -126,6 +126,10 @@ public class HashMap<K, V> implements Map<K, V> {
         return null;
     }
 
+    private Node<K, V> putTreeValue() {
+        return null;
+    }
+
     private void treeifyBin(Node<K, V>[] tab, int hash) {
 
     }
