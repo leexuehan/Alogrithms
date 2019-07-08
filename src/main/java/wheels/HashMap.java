@@ -95,7 +95,7 @@ public class HashMap<K, V> implements Map<K, V> {
             }
             // insert node to a tree
             else if (p instanceof TreeNode) {
-                e = putTreeValue();
+                e = ((TreeNode<K, V>) p).putTreeValue();
             }
             // insert node to a list
             else {
